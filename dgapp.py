@@ -17,7 +17,7 @@ class Generator(nn.Module):
         super().__init__()
         self.label_emb = nn.Embedding(n_classes, n_classes)
 
-        self.net = nn.Sequential(
+        self.model = nn.Sequential(
             nn.Linear(nz + n_classes, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(True),
@@ -37,7 +37,7 @@ class Generator(nn.Module):
     def forward(self, z: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
         c = self.label_emb(labels)
         x = torch.cat((z, c), dim=1)
-        out = self.net(x)
+        out = self.model(x)
         out = out.view(-1, 1, IMG_SIZE, IMG_SIZE)
         return out
 
